@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0D1B2A">
+  <meta name="description" content="Ferramenta de Auditoria 5S — CLT Services">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="5S CLT">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+  <title>Auditoria 5S — CLT Services</title>
+</head>
+<body>
+
+<!-- ── SCREEN: SETUP ──────────────────────────────────── -->
+<div id="screen-setup" class="screen">
+  <div class="setup-logo">CLT 5S</div>
+  <div class="setup-tagline">Ferramenta de Auditoria</div>
+  <div class="setup-box">
+    <h2>Bem-vindo(a)</h2>
+    <p>Identifique-se para começar. O seu nome ficará guardado neste dispositivo.</p>
+    <div class="input-group">
+      <label>O seu nome</label>
+      <input type="text" id="input-auditor-setup" class="input-field" placeholder="Ex: João Pinto" autocomplete="name">
+    </div>
+    <button id="btn-setup-confirmar" class="btn btn-primary">Entrar →</button>
+  </div>
+  <div class="clt-footer"><a href="https://www.cltservices.net" target="_blank">cltservices.net</a></div>
+</div>
+
+<!-- ── SCREEN: HOME ───────────────────────────────────── -->
+<div id="screen-home" class="screen">
+  <header class="app-header">
+    <div class="logo">CLT <span>Auditoria 5S</span></div>
+  </header>
+  <div class="home-body">
+    <div class="home-welcome">
+      <h1>Olá, <span class="auditor-name" id="auditor-nome-home"></span></h1>
+      <p>Auditoria 5S — CLT Services</p>
+      <button id="btn-mudar-auditor" class="btn-mudar-link">Mudar auditor</button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-total">0</div>
+        <div class="stat-label">Auditorias</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-areas">0</div>
+        <div class="stat-label">Áreas</div>
+      </div>
+    </div>
+
+    <div class="ultima-card hidden" id="card-ultima">
+      <h3>Última Auditoria</h3>
+      <div class="ultima-row">
+        <div>
+          <div class="ultima-area-nome" id="ultima-area"></div>
+          <div class="ultima-meta"><span id="ultima-data"></span> · <span id="ultima-auditor-tag"></span></div>
+          <div class="ultima-semaforo" id="ultima-label"></div>
+        </div>
+        <div class="ultima-pct" id="ultima-pct"></div>
+      </div>
+    </div>
+
+    <div class="home-actions">
+      <button id="btn-nova-auditoria" class="btn btn-primary" style="font-size:17px;padding:18px">
+        ＋ Nova Auditoria
+      </button>
+    </div>
+    <div class="home-actions-2">
+      <button id="btn-historico" class="icon-btn-card">
+        <span class="icon">📋</span>
+        <span>Histórico</span>
+      </button>
+      <button id="btn-evolucao" class="icon-btn-card">
+        <span class="icon">📈</span>
+        <span>Evolução</span>
+      </button>
+    </div>
+  </div>
+  <div class="clt-footer"><a href="https://www.cltservices.net" target="_blank">cltservices.net</a></div>
+</div>
+
+<!-- ── SCREEN: NOVA AUDITORIA ─────────────────────────── -->
+<div id="screen-nova" class="screen">
+  <header class="app-header">
+    <button class="btn-back" id="btn-voltar-home">←</button>
+    <div class="logo">CLT <span>Nova Auditoria</span></div>
+  </header>
+  <div class="screen-body">
+    <div class="input-group">
+      <label>Área / Sector</label>
+      <input type="text" id="input-area" class="input-field" placeholder="Ex: Produção A, Armazém, Manutenção" list="areas-list" autocomplete="off">
+      <datalist id="areas-list"></datalist>
+    </div>
+    <div class="input-group">
+      <label>Data da Auditoria</label>
+      <input type="date" id="input-data" class="input-field">
+    </div>
+    <div class="input-group">
+      <label>Auditor</label>
+      <input type="text" id="input-auditor-display" class="input-field" readonly style="opacity:0.7">
+    </div>
+    <div class="obs-info">
+      A auditoria tem <strong>30 critérios</strong> distribuídos pelos 5S. Cada critério é avaliado de <strong>1 a 5</strong>.
+    </div>
+    <button id="btn-iniciar-auditoria" class="btn btn-primary">Iniciar Auditoria →</button>
+  </div>
+</div>
+
+<!-- ── SCREEN: AUDITORIA (Steps S1..S5) ───────────────── -->
+<div id="screen-audit" class="screen">
+  <div id="audit-header" class="audit-s-header">
+    <div class="audit-s-top">
+      <div id="audit-s-badge" class="audit-s-badge">🔴</div>
+      <div id="audit-s-nome" class="audit-s-titulo">Seiri — Triagem</div>
+      <div id="audit-s-step" class="audit-s-step">1 / 5</div>
+    </div>
+    <div id="audit-s-descricao" class="audit-s-desc"></div>
+    <div class="progress-bar-bg">
+      <div id="audit-progress-bar" class="progress-bar-fill" style="width:0%"></div>
+    </div>
+  </div>
+  <div id="criterios-container"></div>
+  <div class="audit-nav">
+    <button id="btn-voltar-step" class="btn btn-ghost" style="flex:0 0 auto;width:auto;padding:15px 18px">←</button>
+    <button id="btn-proximo-s" class="btn btn-primary">Próximo →</button>
+  </div>
+</div>
+
+<!-- ── SCREEN: OBSERVAÇÕES ────────────────────────────── -->
+<div id="screen-obs" class="screen">
+  <header class="app-header">
+    <button class="btn-back" id="btn-voltar-obs">←</button>
+    <div class="logo">CLT <span>Observações</span></div>
+  </header>
+  <div class="screen-body">
+    <div class="obs-info">
+      Passo final. Registe as observações e recomendações para esta área.
+    </div>
+    <div class="input-group">
+      <label>Observações</label>
+      <textarea id="input-obs" class="input-field" placeholder="Pontos positivos, situações encontradas, contexto relevante..."></textarea>
+    </div>
+    <div class="input-group">
+      <label>Recomendações</label>
+      <textarea id="input-rec" class="input-field" placeholder="Acções corretivas, prioridades, próximos passos..."></textarea>
+    </div>
+    <button id="btn-ver-resultado" class="btn btn-primary">Ver Resultado →</button>
+  </div>
+</div>
+
+<!-- ── SCREEN: RESULTADO ──────────────────────────────── -->
+<div id="screen-resultado" class="screen">
+  <header class="app-header">
+    <button class="btn-back" id="btn-voltar-obs-2">←</button>
+    <div class="logo">CLT <span>Resultado</span></div>
+  </header>
+
+  <div class="res-meta">
+    <div class="res-meta-row">
+      <span>📍 <strong id="res-area"></strong></span>
+      <span>📅 <strong id="res-data"></strong></span>
+      <span>👤 <strong id="res-auditor"></strong></span>
+    </div>
+  </div>
+
+  <div class="res-score-card" id="res-score-card">
+    <div class="res-score-pct" id="res-score-pct">—</div>
+    <div class="res-score-total" id="res-score-total"></div>
+    <div class="res-semaforo" id="res-semaforo"></div>
+  </div>
+
+  <div class="res-radar-box">
+    <canvas id="radar-chart" width="300" height="280"></canvas>
+  </div>
+
+  <div class="section-title">Resultado por Dimensão</div>
+  <div class="res-s-lista" id="res-lista-s"></div>
+
+  <div id="res-obs-box" class="res-obs-box" style="display:none">
+    <h4>Observações</h4>
+    <p id="res-obs-text"></p>
+  </div>
+  <div id="res-rec-box" class="res-obs-box" style="display:none;margin-top:10px">
+    <h4>Recomendações</h4>
+    <p id="res-rec-text"></p>
+  </div>
+
+  <div class="res-actions">
+    <button id="btn-guardar" class="btn btn-success">💾 Guardar Auditoria</button>
+    <button id="btn-voltar-home-2" class="btn btn-ghost">← Voltar ao Início</button>
+    <button id="btn-guardar-2" class="btn btn-secondary" style="display:none">💾 Guardar</button>
+  </div>
+  <div class="clt-footer"><a href="https://www.cltservices.net" target="_blank">cltservices.net</a></div>
+</div>
+
+<!-- ── SCREEN: HISTÓRICO ──────────────────────────────── -->
+<div id="screen-historico" class="screen">
+  <header class="app-header">
+    <button class="btn-back" id="btn-voltar-home-hist">←</button>
+    <div class="logo">CLT <span>Histórico</span></div>
+  </header>
+  <div class="filtro-row">
+    <select id="filtro-area">
+      <option value="">Todas as áreas</option>
+    </select>
+  </div>
+  <div class="historico-lista" id="historico-lista">
+    <p class="vazio">Sem auditorias registadas.</p>
+  </div>
+</div>
+
+<!-- ── SCREEN: EVOLUÇÃO ───────────────────────────────── -->
+<div id="screen-evolucao" class="screen">
+  <header class="app-header">
+    <button class="btn-back" id="btn-voltar-home-evol">←</button>
+    <div class="logo">CLT <span>Evolução</span></div>
+  </header>
+  <div class="filtro-row">
+    <select id="filtro-area-evol">
+      <option value="">Todas as áreas</option>
+    </select>
+  </div>
+  <div class="evol-chart-box">
+    <canvas id="evolucao-chart"></canvas>
+    <p class="vazio hidden" id="evol-vazio">Sem dados suficientes para mostrar evolução.</p>
+  </div>
+  <div class="obs-info" style="margin:0 20px 16px;font-size:12px">
+    Cada linha representa a evolução percentual de uma dimensão 5S ao longo das auditorias. A linha branca tracejada é o score geral.
+  </div>
+</div>
+
+<!-- ── TOAST ──────────────────────────────────────────── -->
+<div id="toast" class="toast"></div>
+
+<!-- ── SCRIPTS ────────────────────────────────────────── -->
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- App -->
+<script src="js/data.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<!-- PWA Service Worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
+</script>
+</body>
+</html>
