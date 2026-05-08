@@ -3,7 +3,6 @@
 
 Aplicação web progressiva (PWA) para realização de auditorias 5S.
 Instalável em Android (e iOS) sem necessidade de loja de aplicações.
-
 ---
 
 ## Estrutura de ficheiros
